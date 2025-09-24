@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  video_bot:
+    image: python:3.12-slim
+    container_name: telegram-video-bot
+    restart: unless-stopped
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+      - PIP_NO_CACHE_DIR=1
+    # Mount your code (read-only) and a persistent venv
+    volumes:
+      - ./:/app:ro
+      - bot_venv:/venv
+    # Install ffmpeg (once), create/reuse venv, install deps, run the bot
+    command: >
+      sh -lc '
+        set -e;
+        if ! command -v ffmpeg >/dev/null 2>&1; then
+          apt-get update &&
+          apt-get install -y --no-install-recommends ffmpeg ca-certificates &&
+          rm -rf /var/lib/apt/lists/*;
+        fi;
+        if [ ! -x /venv/bin/python ]; then
+          python -m venv /venv;
+        fi;
+        /venv/bin/pip install --upgrade pip;
+        /venv/bin/pip install -r requirements.txt;
+        exec /venv/bin/python app/main.py
+      '
+
+volumes:
+  bot_venv:
+
