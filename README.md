@@ -5,7 +5,7 @@ A minimal Telegram bot that:
 - Downloads videos (direct links or via `yt-dlp` for YouTube/TikTok/etc.).
 - Replies with the downloaded file.
 - Enforces a chat/user whitelist.
-- Ships with Docker instructions and a ready-to-use image reference: **`docker.io/heylouiz/telegram-video-bot:latest`**.
+- Ships with Docker instructions and a ready-to-use image reference: **`docker.io/heylouiz/telegram-video-downloader-bot:latest`**.
 
 > Supports inline mode for direct `.mp4` URLs. For platforms that need `yt-dlp`, use regular DM/group messages (or “Switch to PM” in inline).
 
@@ -32,14 +32,14 @@ TG_POOL_TIMEOUT=10
 # TELEGRAM_API_BASE=http://tg-bot-api:8081
 ```
 
-Use this **minimal `docker-compose.yml`** (pulls the image from your Docker Hub namespace **`heylouiz`**):
+Use this **minimal `docker-compose.yml`**:
 
 ```yaml
 version: "3.9"
 
 services:
   video_bot:
-    image: docker.io/heylouiz/telegram-video-bot:latest
+    image: docker.io/heylouiz/telegram-video-downloader-bot:latest
     container_name: telegram-video-bot
     restart: unless-stopped
     env_file:
@@ -59,7 +59,7 @@ docker compose logs -f
 
 ### One‑liner (without compose)
 ```bash
-docker run -d --name telegram-video-bot   --restart unless-stopped   --env-file .env   docker.io/heylouiz/telegram-video-bot:latest
+docker run -d --name telegram-video-bot   --restart unless-stopped   --env-file .env   docker.io/heylouiz/telegram-video-downloader-bot:latest
 ```
 
 ---
